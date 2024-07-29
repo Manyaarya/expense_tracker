@@ -21,6 +21,28 @@ class User(db.Model):
     def __repr__(self) -> str:
         return "<Id:%s>" % (str(self.id))
 
+class ExpenseCategory(db.Model):
+    __tablename__ = "expense_category"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.String(255))
+
+    def __repr__(self) -> str:
+        return "<Category:%s>" % (self.name)
+
+class SavingsGoal(db.Model):
+    __tablename__ = "savings_goal"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    target_amount = db.Column(db.Numeric(10, 2), nullable=False)
+    current_amount = db.Column(db.Numeric(10, 2), nullable=False, default=0.00)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
+
+    user = db.relationship("User", backref=db.backref("goals", lazy=True))
+
+    def __repr__(self) -> str:
+        return "<Goal:%s>" % (self.name)
+
 
 class VisitorStats(db.Model):
     __tablename__ = "visitor_stats"
