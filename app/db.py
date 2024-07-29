@@ -11,10 +11,15 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     session_id = db.Column(db.Text, nullable=False)
 
+    # New fields
+    monthly_pocket_money = db.Column(db.Numeric(10, 2), nullable=True)
+    monthly_expenses = db.Column(db.JSON, nullable=True)  # Stores a list of expenses
+    savings_goal = db.Column(db.Numeric(10, 2), nullable=True)
+
     statements = db.relationship("Statements", backref=db.backref("user"), passive_deletes=True)
 
     def __repr__(self) -> str:
-        return "<Id:%s>"%(str(self.id))
+        return "<Id:%s>" % (str(self.id))
 
 
 class VisitorStats(db.Model):
