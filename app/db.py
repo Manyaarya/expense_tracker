@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+from decimal import Decimal
 
 db = SQLAlchemy()
 
@@ -12,9 +13,15 @@ class User(db.Model):
     session_id = db.Column(db.Text, nullable=False)
 
     # New fields
-    monthly_pocket_money = db.Column(db.Numeric(10, 2), nullable=True)
+    monthly_pocket_money = db.Column(db.String(20), nullable=True)  # Store as string
     monthly_expenses = db.Column(db.JSON, nullable=True)  # Stores a list of expenses
-    savings_goal = db.Column(db.Numeric(10, 2), nullable=True)
+    savings_goal = db.Column(db.String(20), nullable=True)  # Store as string
+
+    def get_monthly_pocket_money(self):
+        return Decimal(self.monthly_pocket_money) if self.monthly_pocket_money else None
+
+    def get_savings_goal(self):
+        return Decimal(self.savings_goal) if self.savings_goal else None
 
     statements = db.relationship("Statements", backref=db.backref("user"), passive_deletes=True)
 
@@ -34,14 +41,21 @@ class SavingsGoal(db.Model):
     __tablename__ = "savings_goal"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    target_amount = db.Column(db.Numeric(10, 2), nullable=False)
-    current_amount = db.Column(db.Numeric(10, 2), nullable=False, default=0.00)
+    target_amount = db.Column(db.String(20), nullable=False)  # Store as string
+    current_amount = db.Column(db.String(20), nullable=False, default='0.00')  # Store as string
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
 
     user = db.relationship("User", backref=db.backref("goals", lazy=True))
 
+    def get_target_amount(self):
+        return Decimal(self.target_amount) if self.target_amount else None
+
+    def get_current_amount(self):
+        return Decimal(self.current_amount) if self.current_amount else None
+
     def __repr__(self) -> str:
         return "<Goal:%s>" % (self.name)
+
 
 
 class VisitorStats(db.Model):
