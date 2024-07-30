@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 from decimal import Decimal
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 

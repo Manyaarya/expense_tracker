@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="shadow-card">
+    <div class="form" style="width: 100%; box-shadow: 0px 0px 0px 0px;">
+        <a href="{{ url_for('Settings.settings_index') }}">&lt;&lt; Back to Settings</a>
+        <h1 style="text-align:center;">Initial Setup</h1>
+
+        <form action="{{ url_for('Settings.initial_setup') }}" method="post">
+            {{ form.csrf_token() }}
+
+            <div class="label">
+                <label for="monthly_pocket_money">Monthly Pocket Money</label>
+                {{ form.monthly_pocket_money() }}
+                {% if form.monthly_pocket_money.errors %}
+                    <div class="errors">
+                        {% for error in form.monthly_pocket_money.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="label">
+                <label for="fixed_monthly_expenses">Fixed Monthly Expenses</label>
+                {{ form.fixed_monthly_expenses() }}
+                {% if form.fixed_monthly_expenses.errors %}
+                    <div class="errors">
+                        {% for error in form.fixed_monthly_expenses.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="label">
+                <label for="savings_goal">Savings Goal</label>
+                {{ form.savings_goal() }}
+                {% if form.savings_goal.errors %}
+                    <div class="errors">
+                        {% for error in form.savings_goal.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            {{ form.submit() }}
+        </form>
+    </div>
+</div>
+{% endblock %}

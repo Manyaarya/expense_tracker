@@ -1,6 +1,39 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import Email, Length, DataRequired,NumberRange,EqualTo
 from wtforms.fields import EmailField, PasswordField, SubmitField, TextAreaField, FloatField, DateTimeLocalField, StringField, SelectField
+from flask_wtf import FlaskForm
+from wtforms.fields import FloatField, StringField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, NumberRange, Length
+
+class InitialSetupForm(FlaskForm):
+    monthly_pocket_money = FloatField(
+        "Monthly Pocket Money",
+        [
+            DataRequired("Monthly pocket money is required!"),
+            NumberRange(min=0, message="Pocket money cannot be negative!")
+        ]
+    )
+
+    fixed_monthly_expenses = TextAreaField(
+        "Fixed Monthly Expenses",
+        [
+            DataRequired("Fixed monthly expenses are required!"),
+            Length(max=500, message="Description too long!")
+        ],
+        render_kw={
+            "rows": "4"
+        }
+    )
+
+    savings_goal = FloatField(
+        "Savings Goal",
+        [
+            DataRequired("Savings goal is required!"),
+            NumberRange(min=0, message="Savings goal cannot be negative!")
+        ]
+    )
+
+    submit = SubmitField("Save Setup")
 
 
 class AuthForm(FlaskForm):
